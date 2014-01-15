@@ -57,11 +57,37 @@ namespace MemberReg
         public int MemberId
         {
             get { return memberId; }
+            set
+            {
+                memberId++;
+                value = memberId;
+            }
         }
 
         public ReadOnlyCollection<object> MemberList
         {
             get { return _memberList.AsReadOnly(); }
+        }
+
+        public void AddId(int id)
+        {
+            memberId++;
+            MemberId = id;
+        }
+
+        public void AddLastName(string lName)
+        {
+            LastName = lName;
+        }
+
+        public void AddPhone(int num)
+        {
+            TelNumber = num;
+        }
+
+        public Member(string name)
+        {
+            FirstName = name;
         }
 
         public Member(string firstName, string lastName, int telNumber) 
@@ -71,19 +97,13 @@ namespace MemberReg
             TelNumber = telNumber;
         }
 
-        public void Add(object member)
-        {
-            _memberList.Add(member);
-            memberId++;
-        }
+        //public override string ToString()
+        //{
+        //    StringBuilder sb = new StringBuilder();
 
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
+        //    sb.AppendFormat("{0}\t{1}\tTel-Nummer: {2}\t Medlemsnummer: {3}", FirstName, LastName, TelNumber, MemberId);
 
-            sb.AppendFormat("{0}\t{1}\tTel-Nummer: {2}\t Medlemsnummer: {3}", FirstName, LastName, TelNumber, MemberId);
-
-            return sb.ToString();
-        }
+        //    return sb.ToString();
+        //}
     }
 }

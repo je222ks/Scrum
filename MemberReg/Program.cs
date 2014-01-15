@@ -12,6 +12,7 @@ namespace MemberReg
         {
             List<object> memberList = new List<object>();
 
+
             do
             {
                 switch (GetMenuChoice())
@@ -57,8 +58,6 @@ namespace MemberReg
             telNr = int.Parse(Console.ReadLine());
 
             Member newMember = new Member(fName, lName, telNr);
-
-            newMember.Add(newMember);
 
             foreach (object mem in newMember.MemberList) 
             {

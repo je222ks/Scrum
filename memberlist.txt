@@ -1,0 +1,16 @@
+[Förnamn]
+Jesper
+[Efternamn]
+Ebbesson
+[Telefonnummer]
+12345
+[ID]
+5654
+[Förnamn]
+Kalle
+[Efternamn]
+Anka
+[Telefonnummer]
+54321
+[ID]
+5841
