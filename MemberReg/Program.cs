@@ -10,7 +10,7 @@ namespace MemberReg
     {
         static void Main(string[] args)
         {
-            List<object> memberCount = new List<object>();
+            List<object> memberList = new List<object>();
 
             do
             {
@@ -20,25 +20,25 @@ namespace MemberReg
                         return;
 
                     case 1:
-                        
+
                         break;
 
                     case 2:
-                        
+
                         break;
 
                     case 3:
-                        
+
                         break;
 
                     case 4:
-                        
+
                         break;
 
                     default:
                         throw new Exception();
                 }
-            } while (true);
+            } while (true) ;
         }
 
         public static void createMember() 
