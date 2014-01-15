@@ -11,7 +11,7 @@ namespace MemberReg
         static void Main(string[] args)
         {
             List<object> memberList = new List<object>();
-
+            
 
             do
             {
@@ -42,29 +42,53 @@ namespace MemberReg
             } while (true) ;
         }
 
-        public static void createMember() 
+
+        private static void ContinueOnKeyPressed()
+        {
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.WriteLine("\nTryck ned tangent för att rensa fönstret.\n");
+            Console.ResetColor();
+            Console.ReadKey(true);
+            Console.Clear();
+        }
+
+        public List<Member> CreateMember(List<Member> mem)
         {
             string fName;
             string lName;
             int telNr;
+            int memId;
+            bool flip = true;
 
-            Console.Write("Ange förnamn: ");
-            fName = Console.ReadLine();
+            Console.Clear();
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("-----------------------------------");
+            Console.WriteLine("|        Lägg till ny medlem      |");
+            Console.WriteLine("-----------------------------------");
+            Console.ResetColor();
 
-            Console.Write("Ange efternamn: ");
-            lName = Console.ReadLine();
-
-            Console.Write("Ange tel-nummer: ");
-            telNr = int.Parse(Console.ReadLine());
-
-            Member newMember = new Member(fName, lName, telNr);
-
-            foreach (object mem in newMember.MemberList) 
+            do
             {
-                Console.WriteLine(mem);
-            }
+                Console.Write("Ange förnamn: ");
+                fName = Console.ReadLine();
 
+                Console.Write("Ange efternamn: ");
+                lName = Console.ReadLine();
 
+                Console.Write("Ange tel-nummer: ");
+                // telNr = int.Parse(Console.ReadLine());
+                if ((int.TryParse(Console.ReadLine(), out telNr) && telNr > 0))
+                {
+                    flip = false;   
+                }
+
+                memId = mem[mem.Count - 1].MemberId + 1;
+
+            }while(flip);
+
+            mem.Add(new Member(fName, lName, telNr, memId));
+
+            return mem;
         }
 
         private static int GetMenuChoice()
@@ -106,6 +130,23 @@ namespace MemberReg
             } while (true);
 
             return index;
+        }
+
+        private static List<Member> LoadLog()
+        {
+            LoadRegister log = new LoadRegister("memberlist.txt");
+            List<Member> mem = new List<Member>();
+
+            try
+            {
+                mem = log.Load();
+            }
+            catch
+            {
+                Console.WriteLine("Någonting gick fel då medlemslistan skulle hämtas");
+            }
+
+            return mem;
         }
 
     }

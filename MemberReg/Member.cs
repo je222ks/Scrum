@@ -12,7 +12,7 @@ namespace MemberReg
         private string _firstName;
         private string _lastName;
         private int _telNumber;
-        private int memberId = 0;
+        private int memberId;
         List<object> _memberList = new List<object>();
 
         public string FirstName
@@ -71,7 +71,6 @@ namespace MemberReg
 
         public void AddId(int id)
         {
-            memberId++;
             MemberId = id;
         }
 
@@ -90,11 +89,12 @@ namespace MemberReg
             FirstName = name;
         }
 
-        public Member(string firstName, string lastName, int telNumber) 
+        public Member(string firstName, string lastName, int telNumber, int id) 
         {
             FirstName = firstName;
             LastName = lastName;
             TelNumber = telNumber;
+            MemberId = id;
         }
 
         //public override string ToString()
