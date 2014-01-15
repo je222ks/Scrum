@@ -10,7 +10,7 @@ namespace MemberReg
     {
         static void Main(string[] args)
         {
-            List<object> memberList = new List<object>();
+            List<Member> memberList = new List<Member>();
             
 
             do
@@ -21,7 +21,7 @@ namespace MemberReg
                         return;
 
                     case 1:
-
+                        CreateMember(memberList);
                         break;
 
                     case 2:
@@ -52,7 +52,7 @@ namespace MemberReg
             Console.Clear();
         }
 
-        public List<Member> CreateMember(List<Member> mem)
+        public static List<Member> CreateMember(List<Member> mem)
         {
             string fName;
             string lName;
@@ -91,6 +91,11 @@ namespace MemberReg
             return mem;
         }
 
+        private static void EditMember(List<Member> mem)
+        { 
+            
+        }
+
         private static int GetMenuChoice()
         {
             int index;
@@ -109,7 +114,7 @@ namespace MemberReg
             Console.WriteLine(" 3. Ta bort medlem \n");
             Console.WriteLine(" 4. Visa alla medlemmar \n");
             Console.WriteLine("\n ========================================\n");
-            Console.Write("Ange menyval [0-5]: ");
+            Console.Write("Ange menyval [0-4]: ");
 
             do
             {
@@ -148,6 +153,58 @@ namespace MemberReg
 
             return mem;
         }
+
+        private static Member MemberChoice(string header, List<Member> mems)
+        {
+            int index;
+
+            Console.Clear();
+
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("\n || {0} || \n", header);
+            Console.ResetColor();
+            Console.WriteLine(" 0. Avbryt");
+            Console.WriteLine("------------------------------");
+
+            for (int i = 0; i < mems.Count; i++)
+            {
+                Console.WriteLine(" {0}. \t{1}, {2}", i, mems[i].FirstName, mems[i].LastName);
+            }
+
+            Console.WriteLine("------------------------------");
+            Console.Write(" Ange menyval [0-{0}]: ", mems.Count);
+
+            do
+            {
+                try
+                {
+                    index = int.Parse(Console.ReadLine());
+
+                    if (index == 0)
+                    {
+                        return null;
+                    }
+                    else if (index < 0 || index > mems.Count)
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+                    break;
+                }
+                catch
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("\nVad du har matat in är inte ett giltigt menyval.\n");
+                    Console.WriteLine("\n\tVar god försök igen\t\n");
+                    Console.Write("Ange menyval [0-{0}]: ", mems.Count);
+                    Console.ResetColor();
+                }
+
+            } while (true);
+
+            return mems[index - 1]; 
+        }
+
 
     }
 }
