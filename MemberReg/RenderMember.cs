@@ -15,13 +15,13 @@ namespace MemberReg
             RenderHead("Medlemmar");
             foreach (Member mem in memberList)
             {
-                String.Format("Namn: {0} {1}\tTel-Nummer: {2}\tID: {3}", mem.FirstName, mem.LastName, mem.TelNumber, mem.MemberId);
+                Console.WriteLine(String.Format("Namn: {0} {1}\tTel-Nummer: {2}\tID: {3}", mem.FirstName, mem.LastName, mem.TelNumber, mem.MemberId));
             }
         }
 
         public void Render(Member mem)
         {
-            String.Format("Namn: {0} {1}\tTel-Nummer: {2}\tID: {3}", mem.FirstName, mem.LastName, mem.TelNumber, mem.MemberId);
+            Console.WriteLine(String.Format("Namn: {0} {1}\tTel-Nummer: {2}\tID: {3}", mem.FirstName, mem.LastName, mem.TelNumber, mem.MemberId));
         }
 
         private void RenderHead(string header)

@@ -82,7 +82,7 @@ namespace MemberReg
                     flip = false;
                 }
 
-                memId = mem[mem.Count - 1].MemberId + 1;  // Ngt problem här då "index" blir 0 lr negativt...
+                memId = mem.Count +1;  // Ngt problem här då "index" blir 0 lr negativt...
 
             } while (flip);
 
@@ -107,7 +107,7 @@ namespace MemberReg
 
             do
             {
-                Member memb = MemberChoice("Välj ett recept att ta bort", members);
+                Member memb = MemberChoice("Välj en medlem att ta bort", members);
 
                 if (memb == null)
                 {
@@ -125,7 +125,7 @@ namespace MemberReg
                 {
                     members.Remove(memb);
                     Console.BackgroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine("\n||     Receptet har tagits bort     ||\n");
+                    Console.WriteLine("\n||     Medlemmen har tagits bort     ||\n");
                     Console.ResetColor();
                     ContinueOnKeyPressed();
                 }
@@ -258,7 +258,7 @@ namespace MemberReg
 
             for (int i = 0; i < mems.Count; i++)
             {
-                Console.WriteLine(" {0}. \t{1}, {2}", i, mems[i].FirstName, mems[i].LastName);
+                Console.WriteLine(" {0}. \t{1}, {2}", i + 1, mems[i].FirstName, mems[i].LastName);
             }
 
             Console.WriteLine("------------------------------");
@@ -304,7 +304,7 @@ namespace MemberReg
             if (members == null)
             {
                 Console.BackgroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("\n||     Det finns inga recept att spara     ||\n");
+                Console.WriteLine("\n||     Det finns inga medlemmar att spara     ||\n");
                 Console.ResetColor();
                 ContinueOnKeyPressed();
             }
@@ -314,53 +314,25 @@ namespace MemberReg
                 {
                     log.Save(members);
                     Console.BackgroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine("\n||     Recepten har sparats     ||\n");
+                    Console.WriteLine("\n||     Medlemarna har sparats     ||\n");
                     Console.ResetColor();
                     ContinueOnKeyPressed();
                 }
                 catch
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\n||     Ett fel inträffade då recepten skulle sparas     ||\n");
+                    Console.WriteLine("\n||     Ett fel inträffade då medlemmarna skulle sparas     ||\n");
                     Console.ResetColor();
                     ContinueOnKeyPressed();
                 }
             }
         }
 
-        private static void ViewMember(List<Member> members, bool viewAll = false)
+        private static void ViewMember(List<Member> members)
         {
             RenderMember renderMember = new RenderMember();
 
-            if (members.Count == 0)
-            {
-                // Det finns inga medlemmar
-                Console.Clear();
-                Console.BackgroundColor = ConsoleColor.Yellow;
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.WriteLine(" ||  Det finns inga medlemmar att visa. || ");
-                Console.ResetColor();
-            }
-
-            else if (viewAll == false)
-            {
-                // Renderar en medlem
-                Member recipe = MemberChoice("Välj recept att visa", members);
-
-                if (recipe == null)
-                {
-                    return;
-                }
-
-                Console.Clear();
-                renderMember.Render(members);
-            }
-            else
-            {
-                // Renderar alla medlemmar
-                Console.Clear();
-                renderMember.Render(members);
-            }
+            renderMember.Render(members);
 
             ContinueOnKeyPressed();
         }
