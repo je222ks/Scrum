@@ -11,7 +11,7 @@ namespace MemberReg
         static void Main(string[] args)
         {
             List<Member> memberList = new List<Member>();
-            
+            memberList = LoadLog();
 
             do
             {
@@ -25,21 +25,21 @@ namespace MemberReg
                         break;
 
                     case 2:
-
+                        EditMember(memberList);
                         break;
 
                     case 3:
-
+                        DeleteMember(memberList);
                         break;
 
                     case 4:
-
+                        ViewMember(memberList);
                         break;
 
                     default:
                         throw new Exception();
                 }
-            } while (true) ;
+            } while (true);
         }
 
 
@@ -76,24 +76,113 @@ namespace MemberReg
                 lName = Console.ReadLine();
 
                 Console.Write("Ange tel-nummer: ");
-                // telNr = int.Parse(Console.ReadLine());
+                //telNr = int.Parse(Console.ReadLine());
                 if ((int.TryParse(Console.ReadLine(), out telNr) && telNr > 0))
                 {
-                    flip = false;   
+                    flip = false;
                 }
 
-                memId = mem[mem.Count - 1].MemberId + 1;
+                memId = mem[mem.Count - 1].MemberId + 1;  // Ngt problem här då "index" blir 0 lr negativt...
 
-            }while(flip);
+            } while (flip);
 
             mem.Add(new Member(fName, lName, telNr, memId));
 
             return mem;
         }
 
+        private static void DeleteMember(List<Member> members)
+        {
+            if (members == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("\n||     Det finns inga medlemmar att ta bort     ||\n");
+                Console.ResetColor();
+                ContinueOnKeyPressed();
+                return;
+            }
+
+            ConsoleKey keyPress;
+
+            do
+            {
+                Member memb = MemberChoice("Välj ett recept att ta bort", members);
+
+                if (memb == null)
+                {
+                    return;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("\n Är du säker på att du vill ta bort '{0} {1}'?  [ J / N ]", memb.FirstName, memb.LastName);
+                Console.ResetColor();
+
+                keyPress = Console.ReadKey().Key;          
+
+                if (keyPress == ConsoleKey.J)
+                {
+                    members.Remove(memb);
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine("\n||     Receptet har tagits bort     ||\n");
+                    Console.ResetColor();
+                    ContinueOnKeyPressed();
+                }
+
+            } while (true);
+        }
+
         private static void EditMember(List<Member> mem)
-        { 
-            
+        {
+            Member memb;
+            int index;
+            string fN;
+            string lN;
+            int pN;
+
+            memb = MemberChoice("Välj en medlem  för redigering", mem);
+            // Lägga till try/catch?
+
+
+            Console.Clear();
+            Console.WriteLine("Data i dagsläget: {0} {1}\t{2}", memb.FirstName, memb.LastName, memb.TelNumber);
+            Console.WriteLine("Vad önskar Ni editera?");
+            Console.WriteLine("0. Avsluta\n1. Förnamn\n2.Efternamn\n3.Telefonnummer");
+            Console.Write("Data för editering: ");
+
+            if (int.TryParse(Console.ReadLine(), out index) && index >= 0 && index <= 3)
+            {
+                switch (index)
+                {
+                    case 0:
+                        break;
+
+                    case 1:
+                        Console.Write("Ange ett nytt förnamn: ");
+                        fN = Console.ReadLine();
+                        memb.FirstName = fN;
+                        break;
+
+                    case 2:
+                        Console.Write("Ange ett nytt efternamn: ");
+                        lN = Console.ReadLine();
+                        memb.LastName = lN;
+                        break;
+
+                    case 3:
+                        if ((int.TryParse(Console.ReadLine(), out pN) && pN > 0))
+                        {
+                            memb.TelNumber = pN;
+                        }
+                        break;
+
+                    default:
+                        throw new Exception();
+                }
+            }
+
+            SaveMembers(mem);
         }
 
         private static int GetMenuChoice()
@@ -202,9 +291,78 @@ namespace MemberReg
 
             } while (true);
 
-            return mems[index - 1]; 
+            return mems[index - 1];
         }
 
 
+        private static void SaveMembers(List<Member> members)
+        {
+            LoadRegister log = new LoadRegister("memberlist.txt");
+
+            Console.Clear();
+
+            if (members == null)
+            {
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("\n||     Det finns inga recept att spara     ||\n");
+                Console.ResetColor();
+                ContinueOnKeyPressed();
+            }
+            else if (members != null)
+            {
+                try
+                {
+                    log.Save(members);
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine("\n||     Recepten har sparats     ||\n");
+                    Console.ResetColor();
+                    ContinueOnKeyPressed();
+                }
+                catch
+                {
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n||     Ett fel inträffade då recepten skulle sparas     ||\n");
+                    Console.ResetColor();
+                    ContinueOnKeyPressed();
+                }
+            }
+        }
+
+        private static void ViewMember(List<Member> members, bool viewAll = false)
+        {
+            RenderMember renderMember = new RenderMember();
+
+            if (members.Count == 0)
+            {
+                // Det finns inga medlemmar
+                Console.Clear();
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine(" ||  Det finns inga medlemmar att visa. || ");
+                Console.ResetColor();
+            }
+
+            else if (viewAll == false)
+            {
+                // Renderar en medlem
+                Member recipe = MemberChoice("Välj recept att visa", members);
+
+                if (recipe == null)
+                {
+                    return;
+                }
+
+                Console.Clear();
+                renderMember.Render(members);
+            }
+            else
+            {
+                // Renderar alla medlemmar
+                Console.Clear();
+                renderMember.Render(members);
+            }
+
+            ContinueOnKeyPressed();
+        }
     }
 }
