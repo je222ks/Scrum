@@ -1,0 +1,16 @@
+[Förnamn]
+Jesper
+[Efternamn]
+Ebbesson
+[Telefonnummer]
+12345
+[ID]
+1
+[Förnamn]
+Kalle
+[Efternamn]
+Anka
+[Telefonnummer]
+12345
+[ID]
+2

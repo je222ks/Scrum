@@ -57,7 +57,7 @@ namespace MemberReg
             string fName;
             string lName;
             int telNr;
-            int memId;
+            int memId = 0;
             bool flip = true;
 
             Console.Clear();
@@ -82,11 +82,13 @@ namespace MemberReg
                     flip = false;
                 }
 
-                memId = mem.Count +1;  // Ngt problem här då "index" blir 0 lr negativt...
+                memId = NewMemberId(mem); // Ngt problem här då "index" blir 0 lr negativt...
 
             } while (flip);
 
             mem.Add(new Member(fName, lName, telNr, memId));
+
+            SaveMembers(mem);
 
             return mem;
         }
@@ -130,6 +132,7 @@ namespace MemberReg
                     ContinueOnKeyPressed();
                 }
 
+                SaveMembers(members);
             } while (true);
         }
 
@@ -148,7 +151,7 @@ namespace MemberReg
             Console.Clear();
             Console.WriteLine("Data i dagsläget: {0} {1}\t{2}", memb.FirstName, memb.LastName, memb.TelNumber);
             Console.WriteLine("Vad önskar Ni editera?");
-            Console.WriteLine("0. Avsluta\n1. Förnamn\n2.Efternamn\n3.Telefonnummer");
+            Console.WriteLine("0. Avsluta\n1. Förnamn\n2. Efternamn\n3. Telefonnummer");
             Console.Write("Data för editering: ");
 
             if (int.TryParse(Console.ReadLine(), out index) && index >= 0 && index <= 3)
@@ -171,6 +174,7 @@ namespace MemberReg
                         break;
 
                     case 3:
+                        Console.Write("Ange nytt telefonnummer: ");
                         if ((int.TryParse(Console.ReadLine(), out pN) && pN > 0))
                         {
                             memb.TelNumber = pN;
@@ -190,6 +194,7 @@ namespace MemberReg
             int index;
 
             // Inläsning av menyval, och kontroll så att det är ett giltigt val.
+            Console.Clear();
             Console.BackgroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("----------------------------------------");
             Console.WriteLine("|            Medlemsregister           |");
@@ -228,8 +233,8 @@ namespace MemberReg
 
         private static List<Member> LoadLog()
         {
-            LoadRegister log = new LoadRegister("memberlist.txt");
             List<Member> mem = new List<Member>();
+            LoadRegister log = new LoadRegister("memberlist.txt");
 
             try
             {
@@ -294,6 +299,19 @@ namespace MemberReg
             return mems[index - 1];
         }
 
+        private static int NewMemberId(List<Member> members)
+        {
+            if (members.Count < 1)
+            {
+                return 1;
+            }
+            else
+            {
+                int lastAdded = members.Count - 1;
+                int lastAddedId = members[lastAdded].MemberId;
+                return lastAddedId += 1;
+            }
+        }
 
         private static void SaveMembers(List<Member> members)
         {
